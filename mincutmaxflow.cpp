@@ -16,6 +16,11 @@ class FlowEdge{
 	int to(){return v;}
 	int capacity(){return capacity;}
 	int flow(){return flow;}
+	int other(int vertex){
+		if(vertex == u)return v;
+		else
+			return u;
+	}
 
 int residualCapacityTo(int vertex){
 	if(vertex == u) return flow;
@@ -51,8 +56,17 @@ public Fulkerson{
 	int value;
 	Fulkerson(FlowNetwork G, int s, int t){
 		while(hasAugmentingPaths(G,s,t)){
-			
+			int bottle = 1000000;
+			for(int i = s ; i!= t ; i = edgeTo[i].other(i))
+				bottle = min(bottle,edgeTo[i].residualCapacityTo(i));
+			for(int i = s ; i!=t ; i=edgeTo[i].other(i)){
+				edgeTo[i].addResidualFlowTo(i,bottle);
+			}
+			value+=bottle;
 		}
+	}
+	bool hasAugmentingPaths(FlowNetwork G, int s, int t){
+		
 	}
 }
 int main(){
